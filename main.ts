@@ -1,3 +1,18 @@
+function checkGuess (text: string) {
+    match = 0
+    for (let index = 0; index <= 4; index++) {
+        if (guess == textList[index]) {
+            game.splash("correct!")
+            match += 1
+        } else {
+            game.splash("try again!")
+            match += -1
+        }
+    }
+}
+let match = 0
+let guess = ""
+let textList: string[] = []
 scene.setBackgroundImage(img`
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -328,7 +343,7 @@ img`
     ................................
     `
 ]
-let textList = [
+textList = [
 "burger",
 "donut",
 "ice cream",
@@ -339,3 +354,6 @@ for (let index = 0; index <= foodList.length; index++) {
     picnicFood.setImage(foodList[index])
     pause(500)
 }
+picnicFood.destroy()
+guess = game.askForString("What was in Yogi's Basket?", 10)
+checkGuess(guess)
