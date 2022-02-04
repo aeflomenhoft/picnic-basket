@@ -335,3 +335,7 @@ let textList = [
 "pizza",
 "taco"
 ]
+for (let index = 0; index <= foodList.length; index++) {
+    picnicFood.setImage(foodList[index])
+    pause(500)
+}
