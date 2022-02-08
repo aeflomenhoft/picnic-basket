@@ -1,18 +1,38 @@
+function checkScore () {
+    if (info.score() == 5) {
+        game.splash("You win!")
+    }
+}
 function checkGuess (text: string) {
     match = 0
-    for (let index = 0; index <= 4; index++) {
-        if (guess == textList[index]) {
-            game.splash("correct!")
-            match += 1
-        } else {
-            game.splash("try again!")
-            match += -1
+    for (let guess = 0; guess <= foodList.length - 1; guess++) {
+        if (textList[guess] == text) {
+            match = 1
         }
+    }
+    if (match == 1) {
+        music.baDing.play()
+        info.changeScoreBy(1)
+        game.splash("Your score is " + info.score())
+    } else {
+        music.wawawawaa.play()
+        strikes += 1
+        game.splash("That's " + strikes + " strikes!")
+    }
+    checkScore()
+    checkStrikes()
+}
+function checkStrikes () {
+    if (strikes == 3) {
+        game.over(false)
     }
 }
 let match = 0
 let guess = ""
+let strikes = 0
 let textList: string[] = []
+let foodList: Image[] = []
+game.splash("Yogi dropped the food out of his picnic basket. Can you remember what he dropped? Press A when you are ready!")
 scene.setBackgroundImage(img`
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -171,7 +191,7 @@ picnicFood.setImage(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `)
-let foodList = [
+foodList = [
 img`
     ...........ccccc66666...........
     ........ccc4444444444666........
@@ -346,14 +366,19 @@ img`
 textList = [
 "burger",
 "donut",
-"ice cream",
+"icecream",
 "pizza",
 "taco"
 ]
-for (let index = 0; index <= foodList.length; index++) {
+for (let index = 0; index <= 4; index++) {
     picnicFood.setImage(foodList[index])
+    picnicFood.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
     pause(500)
 }
 picnicFood.destroy()
-guess = game.askForString("What was in Yogi's Basket?", 10)
-checkGuess(guess)
+info.setScore(0)
+strikes = 0
+while (info.score() < 5 || strikes < 3) {
+    guess = game.askForString("What was in Yogi's Basket?", 10)
+    checkGuess(guess)
+}
